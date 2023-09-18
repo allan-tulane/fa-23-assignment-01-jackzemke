@@ -4,6 +4,7 @@ See assignment-01.pdf for details.
 """
 # no imports needed.
 
+
 def foo(x):
     if x<=1:
         return x
@@ -51,52 +52,22 @@ class Result:
     
 
 
-def longest_run_recursive(mylist, key):
-    # flag = False
-    # longest = 0
-    # if len(mylist) == 1:
-    #     if mylist[0] == key:
-    #         flag = True
-    #         longest += 1
-    #         print(mylist)
-    #         return
-    #     else:
-    #         return
-    
-    # final = Result(left_size=longest_run_recursive(mylist[:len(mylist)//2],key),
-    #               right_size=longest_run_recursive(mylist[len(mylist)//2:],key),
-    #               longest_size = longest,
-    #               is_entire_range = flag)
-    # return final.longest_size
+def longest_run_recursive(mylist, key, track = None):
+    if track is None:
+        track = Result(0,0,0,False)
+    # print(mylist,len(mylist))
+    # print(track)
     if len(mylist) == 0:
-        return Result(0, 0, 0, False)
-
-    if len(mylist) == 1:
+        # print(exit)
+        return track
+    else:
         if mylist[0] == key:
-            return Result(1, 1, 1, True)
+            track.left_size += 1
+            if track.left_size > track.longest_size:
+                track.longest_size = track.left_size
         else:
-            return Result(0, 0, 0, False)
-
-    left = longest_run_recursive(mylist[:len(mylist) // 2], key)
-    right = longest_run_recursive(mylist[len(mylist) // 2:], key)
-
-    left_size = left.left_size
-    right_size = right.right_size
-
-    if mylist[len(mylist) // 2 - 1] == key:
-        left_size += right.left_size
-
-    if mylist[len(mylist) // 2] == key:
-        right_size += left.right_size
-
-    longest_size = max(left.longest_size, right.longest_size)
-
-    if mylist[len(mylist) // 2 - 1] == key and mylist[len(mylist) // 2] == key:
-        longest_size = max(longest_size, left.right_size + right.left_size)
-
-    is_entire_range = (left.is_entire_range and right.is_entire_range)
-
-    return Result(left_size, right_size, longest_size, is_entire_range)
+            track.left_size = 0
+        return longest_run_recursive(mylist[1:], key, track)
 
 
 ## Feel free to add your own tests here.
@@ -106,9 +77,14 @@ def test_longest_run():
     assert longest_run([2,12,12,8,12,12,0,12,1,1,1,1,1], 8) == 1
     assert longest_run([2,12,12,8,12,12,0,12,1,1,1,1,1], 134) == 0
 
-print('!!!TEST!!!! ' + str(longest_run_recursive([2,12,12,8,12,12,0,12,1,1,1,1,1], 8)))
-print(longest_run_recursive([1],1))
-print(longest_run_recursive([1,1,1,1,1,1,1],1))
-print(longest_run_recursive([1,2,3,4,5,6,7],8))
-print(longest_run_recursive([1,2,2,3,4,4,5,5,2,2,2,2,2,3],2))
-# test_longest_run()
+# print('!!!TEST!!!! ' + str(longest_run_recursive([2,12,12,8,12,12,0,12,1,1,1,1,1], 12)))
+# print(longest_run_recursive([2,12,12,8,12,12,12,0,12,1], 999)) 
+# print(longest_run_recursive([1],1))
+# print(longest_run_recursive([1,1,1,1,1,1,1],1))
+# print(longest_run_recursive([1,2,3,4,5,6,7],8))
+# print(longest_run_recursive([1,2,2,3,4,4,5,5,2,2,2,2,2,3],2).longest_size)
+# # print()
+# print(longest_run_recursive([2,12,12,8,12,12,12,0,12,1], 12).longest_size)
+# # test_longest_run()
+# print(longest_run_recursive([6, 12, 12, 12, 12, 6, 6, 6], 12).longest_size)
+# print(longest_run_recursive([2,12,12,8,12,12,12,0,12,1], 999).longest_size)

@@ -48,13 +48,6 @@ $$
     - This function takes in the upper bound of the fibonacci sequence, $x$, as its only argument. It then recursively adds the two preceding numbers, recursively calling itself until it reaches the principal preceding number, 1. Once the recursive function reaches that base case (1), it returns the sum of all  numbers $n$ such that $1\le n \le x$
 
 .  
-.  
-.  
-.  
-.  
-.  
-.  
-.  
   
 
 3. **Parallelism and recursion** (26 pts)
@@ -77,27 +70,19 @@ E.g., `longest_run([2,12,12,8,12,12,12,0,12,1], 12) == 3`
 
   - 3b. (4 pts) What is the Work and Span of this implementation?  
     - Work: $ \in O(n) $ because the implementation must sequentially run through the entire list.  
-    - Span: $ \in O(n) $ for the same reason as above, the longest trail of dependancies is the entire list as the implementation must iterate through the entire list.
+    - Span: $ \in O(n) $ for the same reason as above, the longest trail of dependancies is the entire list, as the implementation must iterate through every element in the list.
 
 .  
 
   - 3c. (7 pts) Next, implement a `longest_run_recursive`, a recursive, divide and conquer implementation. This is analogous to our implementation of `sum_list_recursive`. To do so, you will need to think about how to combine partial solutions from each recursive call. Make use of the provided class `Result`.   
 
   - 3d. (4 pts) What is the Work and Span of this sequential algorithm?  
-    - The work of this algorithm is given by the recurrence relation $W(n) = 2W(n/2) + n$, because the list is recursively split into two halves, and the functions are run on both halves. This is $\in O(n\log n)$
-    - The span of this algorithm is given by the recurrence relation $S(n) = S(n/2) + n$, which is $O(\log_{2} n) \in O(\log n)$
+    - Because the list is analyzed sequentially, the algorithm cannot analyze an element until it analyzes the one before it. This means that the work is linearly dependent on the size of the list. The Work is given as $O(n)$
+    - Similarly, the longest chain of dependent operations in this case is the full length of the list, as each operation is dependent on the one before it. Therefore, the span is given as $O(n)$
+    
 
 .  
-
 
   - 3e. (4 pts) Assume that we parallelize in a similar way we did with `sum_list_recursive`. That is, each recursive call spawns a new thread. What is the Work and Span of this algorithm?  
-
-.  
-.  
-.  
-.  
-.  
-.  
-.  
-.  
-
+    - The work of this algorithm would be given by the recurrence relation $W(n) = 2W(n/2) + 1$, because the input list is recursively split into two halves, and two new threads are related. Each thread does a constant amount of work, which would be to simply check if the element is a key and adds to the longest run. This recurrence is $O(n)$. It has the same work as the sequential implementation because it still needs to make the same amount of comparisons, analyzing each element in the original list. 
+    - The span of this algorithm is given by the recurrence relation $S(n) = S(n/2) + n$, because the parallelization allows for multiple operations to occur at once. This means that the span is dependent on the tree depth, which can be given by $O(\log_{2} n) \in O(\log n)$
